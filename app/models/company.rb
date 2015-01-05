@@ -1,7 +1,4 @@
 class Company
-  include HTTParty
-  base_uri 'http://grok.metalayer.com/api/companies/1/'
-
   # Defaults
   @@ranges ||= {revenue: 0..15000000, employees: 0..300}
 
@@ -52,74 +49,10 @@ class Company
     CompanyRelation.new(query)
   end
 
-  def self.paginate(options = {})
-    # Build the query
-    query = {
-      pagination: {
-        page_start: options[:offset],
-        page_size: options[:size]
-      }
-    }
-    CompanyRelation.new(query)
-  end
-
-  # Arguments are field: :direction
-  def self.order(options = {})
-    # Build the query
-    query = {
-      sort: '%s %s' % options.to_a.first
-    }
-    CompanyRelation.new(query)
-  end
-
-  private
-    def selected_hash(hash)
-      hash.keys
-    end
 end
 
-=begin
-
-{
-  "pagination": {
-    "sort": "company_name asc",
-    "page_start": 0,
-    "page_size": 10
-  },
-  "filters": {
-    "city": {
-      "selected": "Brooklyn"
-    },
-    "revenue": {
-      "max": 15000000,
-      "selected": {
-        "max": 15000000,
-        "min": null
-      },
-      "min": 0
-    },
-    "employees": {
-      "max": 300,
-      "selected": {
-        "max": 300,
-        "min": null
-      },
-      "min": 0
-    },
-    "state": {
-      "selected": "NY"
-    },
-    "has_crossreference": {
-      "selected": true
-    },
-    "is_private": {
-      "selected": true
-    }
-  }
-}
-=end
-
-class CompanyRelation
+class CompanyRelation < Company
+  BASE_URL = 'http://grok.metalayer.com/api/companies/1/'
 
   FILTERS_DEFAULT = {
     city: {
@@ -160,42 +93,28 @@ class CompanyRelation
     @query = query.reverse_merge(pagination: PAGINATION_DEFAULT, filters: FILTERS_DEFAULT)
   end
 
-  def where(options = {})
-    @query[:filters].merge!(
-      city: {selected: options[:city]},
-      state: {selected: options[:state]},
-      has_crossreference: {selected: options.fetch(:has_crossreference, true)},
-      is_private: {selected: options.fetch(:is_private, true)},
-      revenue: {
-        max: @@ranges[:revenue].max,
-        selected: {
-          max: options[:revenue].max,
-          min: options[:revenue].min
-        },
-        min: @@ranges[:revenue].min
-      },
-      employees: {
-        max: @@ranges[:employees].max,
-        selected: {
-          max: options[:employees].max,
-          min: options[:employees].min
-        },
-        min: @@ranges[:employees].min
-      }
-    )
-    self
-  end
-
   def paginate(options = {})
     @query[:pagination].merge!(options)
     self
   end
 
   def order(options = {})
-    @query[:pagination].reverse_merge!(sort: '%s %s' % options.to_a.first)
+    @query[:pagination].merge!(sort: '%s %s' % options.to_a.first)
+    self
   end
 
   def each(&block)
-    post('list.json')
+    c = Curl::Easy.http_post(BASE_URL+'list', @query.to_json) do |curl|
+      curl.headers['Accept'] = 'application/json'
+      curl.headers['Content-Type'] = 'application/json'
+    end
+  end
+
+  def send
+    c = Curl::Easy.http_post(BASE_URL+'list', @query.to_json) do |curl|
+      curl.headers['Accept'] = 'application/json'
+      curl.headers['Content-Type'] = 'application/json'
+    end
+    ActiveSupport::JSON.decode(c.body)
   end
 end
