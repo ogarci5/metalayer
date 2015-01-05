@@ -37,10 +37,7 @@ class CompanyRelation < Company
   PAGINATION_DEFAULT = ORDER_DEFAULT.merge(page_start: 0, page_size: 10)
 
   attr_writer :results
-
-  def results
-    @results ||= self.api_call
-  end
+  attr_reader :query
 
   def initialize(query = {})
     @query = query.reverse_merge(pagination: PAGINATION_DEFAULT, filters: FILTERS_DEFAULT)
@@ -56,19 +53,25 @@ class CompanyRelation < Company
     self
   end
 
+
+
+  def results
+    @results ||= self.api_call
+  end
+
   def each(&block)
     c = self.results
     body = ActiveSupport::JSON.decode(c.body)
     if block_given?
-      body['results'].map{|r| Company.new(r)}.each {|result| block.call(result)}
+      body['results'].each {|result| block.call(result)}
     else
-      body['results'].map{|r| Company.new(r)}.each
+      body['results'].each
     end
   end
 
   def send
     c = self.results
-    ActiveSupport::JSON.decode(c.body)['results'].map{|r| Company.new(r)}
+    ActiveSupport::JSON.decode(c.body)
   end
 
   def total

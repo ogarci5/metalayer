@@ -1,0 +1,10 @@
+<% @companies.each do |company| %>
+  <tr>
+    <td><%=company['company_name']%></td>
+    <td><%=company['city']%></td>
+    <td><%=company['state']%></td>
+    <td><%=company['industry']%></td>
+    <td><%=company['annual_revenue']%></td>
+    <td><%=company['employees']%></td>
+  </tr>
+<% end %>

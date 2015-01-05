@@ -23,30 +23,22 @@
   </div>
 </div>
 
-<h2 class="sub-header">Section title</h2>
+<h2 class="sub-header">Companies</h2>
+<p>Showing <%=@companies.query[:pagination][:page_size]%> of <%=@companies.total%></p>
 <div class="table-responsive">
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>Company Name</th>
-        <th>City</th>
-        <th>State</th>
-        <th>Industry</th>
-        <th>Revenue</th>
-        <th>Employees</th>
+        <th class="field-header" field="company_name">Company Name</th>
+        <th class="field-header" field="city">City</th>
+        <th class="field-header" field="state">State</th>
+        <th class="field-header" field="industry">Industry</th>
+        <th class="field-header" field="annual_revenue">Revenue</th>
+        <th class="field-header" field="employees">Employees</th>
       </tr>
     </thead>
-    <tbody>
-      <% @companies.each do |company| %>
-        <tr>
-          <td><%=company.company_name%></td>
-          <td><%=company.city%></td>
-          <td><%=company.state%></td>
-          <td><%=company.industry%></td>
-          <td><%=company.annual_revenue%></td>
-          <td><%=company.employees%></td>
-        </tr>
-      <% end %>
+    <tbody id="companies">
+      <%= render partial: 'table' %>
     </tbody>
   </table>
 </div>

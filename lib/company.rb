@@ -2,8 +2,6 @@ class Company
   # Defaults
   @@ranges ||= {revenue: 0..15000000, employees: 0..300}
 
-  attr_reader :company_name, :city, :state, :industry, :annual_revenue, :employees
-
   # Setup for ranges
   def self.set_ranges(ranges = {})
     ranges.each do |key, value|
@@ -54,11 +52,5 @@ class Company
   # Uses the defaults
   def self.all
     CompanyRelation.new
-  end
-
-  def initialize(params)
-    params.each do |key, value|
-      instance_variable_set("@#{key}", value)
-    end
   end
 end
