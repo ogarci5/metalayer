@@ -63,7 +63,7 @@ class CompanyRelation < Company
     c = self.results
     body = ActiveSupport::JSON.decode(c.body)
     if block_given?
-      body['results'].each {|result| block.call(result)}
+      body['results'].try(:each) {|result| block.call(result)}
     else
       body['results'].each
     end
@@ -77,7 +77,7 @@ class CompanyRelation < Company
   def total
     c = self.results
     body = ActiveSupport::JSON.decode(c.body)
-    body['pagination']['total_count']
+    body.try(:[], 'pagination').try(:[], 'total_count')
   end
 
   protected

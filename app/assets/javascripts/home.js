@@ -3,8 +3,11 @@
 $(function() {
   $('.field-header').click(function() {
     var field = $(this).attr('field');
-    if($(this).hasClass('active')) {
-      $('.field-header').removeClass('active');
+    $('.field-header').removeClass('active');
+    if($(this).hasClass('asc')) {
+      $(this).removeClass('asc');
+      $(this).addClass('desc');
+      $(this).addClass('active');
       $.ajax({
         dataType: "html",
         url: '/show',
@@ -13,7 +16,8 @@ $(function() {
         $('#companies').html(html);
       });
     } else {
-      $('.field-header').removeClass('active');
+      $(this).removeClass('desc');
+      $(this).addClass('asc');
       $(this).addClass('active');
       $.ajax({
         dataType: "html",
