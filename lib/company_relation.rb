@@ -32,9 +32,13 @@ class CompanyRelation < Company
     }
   }
 
-  ORDER_DEFAULT = {sort: 'company_name asc'}
+  ORDER_DEFAULT = {sort: 'company_name_s asc'}
 
   PAGINATION_DEFAULT = ORDER_DEFAULT.merge(page_start: 0, page_size: 10)
+
+  FIELD_MAPPINGS = {name: :company_name_s, company_name: :company_name_s, city: :city_s, state: :state_s,
+                    industry: :industry_s, revenue: :annual_revenue_l, annual_revenue: :annual_revenue_l,
+                    employees: :employees_l}
 
   attr_writer :results
   attr_reader :query
@@ -49,10 +53,9 @@ class CompanyRelation < Company
   end
 
   def order(options = {})
-    @query[:pagination].merge!(sort: '%s %s' % options.to_a.first)
+    @query[:pagination].merge!(sort: '%s %s' % FIELD_MAPPINGS[options.to_a.first])
     self
   end
-
 
 
   def results
@@ -63,7 +66,7 @@ class CompanyRelation < Company
     c = self.results
     body = ActiveSupport::JSON.decode(c.body)
     if block_given?
-      body['results'].try(:each) {|result| block.call(result)}
+      body['results'].each {|result| block.call(result)}
     else
       body['results'].each
     end
@@ -77,7 +80,7 @@ class CompanyRelation < Company
   def total
     c = self.results
     body = ActiveSupport::JSON.decode(c.body)
-    body.try(:[], 'pagination').try(:[], 'total_count')
+    body['pagination']['total_count']
   end
 
   protected
