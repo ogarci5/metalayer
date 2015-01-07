@@ -26,6 +26,15 @@
 <h2 class="sub-header">Companies</h2>
 <p>Showing <%=@companies.query[:pagination][:page_size]%> of <%=@companies.total%></p>
 <div class="table-responsive">
+  <div id="company-mask">
+    <div class="mask"></div>
+    <div class="loading-container">
+      <div class="loading">
+        <%= image_tag(image_path('loading.gif')) %>
+        <p>Please wait...</p>
+      </div>
+    </div>
+  </div>
   <table class="table table-striped">
     <thead>
       <tr>
