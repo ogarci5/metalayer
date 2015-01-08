@@ -5,9 +5,7 @@ $(function() {
     var field = $(this).attr('field');
     $('.field-header').removeClass('active');
     if($(this).hasClass('asc')) {
-      $(this).removeClass('asc');
-      $(this).addClass('desc');
-      $(this).addClass('active');
+      $(this).removeClass('asc').addClass('desc').addClass('active');
       $.ajax({
         dataType: "html",
         url: '/show',
@@ -16,9 +14,7 @@ $(function() {
         $('#companies').html(html);
       });
     } else {
-      $(this).removeClass('desc');
-      $(this).addClass('asc');
-      $(this).addClass('active');
+      $(this).removeClass('desc').addClass('asc').addClass('active');
       $.ajax({
         dataType: "html",
         url: '/show',
@@ -27,5 +23,15 @@ $(function() {
         $('#companies').html(html);
       });
     }
+  });
+
+  $('#page_size').change(function() {
+    $.ajax({
+      dataType: "html",
+      url: '/show',
+      data: {page_size: $(this).val()}
+    }).done(function(html) {
+      $('#companies').html(html);
+    });
   });
 });

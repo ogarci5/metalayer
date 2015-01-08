@@ -38,7 +38,7 @@ class CompanyRelation < Company
 
   FIELD_MAPPINGS = {name: :company_name_s, company_name: :company_name_s, city: :city_s, state: :state_s,
                     industry: :industry_s, revenue: :annual_revenue_l, annual_revenue: :annual_revenue_l,
-                    employees: :employees_l}
+                    employees: :employees_l}.with_indifferent_access
 
   attr_writer :results
   attr_reader :query
@@ -53,7 +53,8 @@ class CompanyRelation < Company
   end
 
   def order(options = {})
-    @query[:pagination].merge!(sort: '%s %s' % FIELD_MAPPINGS[options.to_a.first])
+    options[FIELD_MAPPINGS[options.keys.first]] = options.delete options.keys.first
+    @query[:pagination].merge!(sort: '%s %s' % options.to_a.first)
     self
   end
 
