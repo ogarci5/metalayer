@@ -22,7 +22,7 @@
   top: 51px;
   bottom: 0;
   left: 0;
-  z-index: 1000;
+  z-index: 10;
   display: block;
   padding: 20px;
   overflow-x: hidden;
@@ -80,13 +80,27 @@
   }
 }
 
-th.field-header {
-  cursor: pointer;
-  &.active span {
-    display: inline;
+.pagination-container {
+  p, nav {
+    display: inline-block;
+    vertical-align: middle;
   }
-  span {
-    display: none;
+  nav ul {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+}
+
+.table-responsive {
+  width: 100%;
+  th.field-header {
+    cursor: pointer;
+    &.active span {
+      display: inline;
+    }
+    span {
+      display: none;
+    }
   }
 }
 
@@ -101,5 +115,5 @@ th.field-header {
 }
 
 #console {
-  z-index: 1001;
+  z-index: 15;
 }

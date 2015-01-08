@@ -48,7 +48,7 @@ class CompanyRelation < Company
   end
 
   def results
-    @results ||= self.api_call
+    @results ||= ActiveSupport::JSON.decode(self.api_call.body).with_indifferent_access
   end
 
   def paginate(options = {})
@@ -64,31 +64,30 @@ class CompanyRelation < Company
   end
 
   def each(&block)
-    c = self.results
-    body = ActiveSupport::JSON.decode(c.body)
+    body = self.results
     if block_given?
-      body['results'].try(:each) {|result| block.call(result)}
+      body['results'].each{|result| block.call(result)}
     else
       body['results'].each
     end
   end
 
   def send
-    c = self.results
-    ActiveSupport::JSON.decode(c.body)
+    self.results
   end
 
   def total
-    c = self.results
-    body = ActiveSupport::JSON.decode(c.body)
-    body.try(:[], 'pagination').try(:[], 'total_count')
+    self.results['pagination']['total_count']
   end
 
-  protected
-    def api_call
-      Curl::Easy.http_post(BASE_URL+'list', @query.to_json) do |curl|
-        curl.headers['Accept'] = 'application/json'
-        curl.headers['Content-Type'] = 'application/json'
-      end
+  def pagination
+    c = self.results['pagination']
+  end
+
+  def api_call
+    Curl::Easy.http_post(BASE_URL+'list', @query.to_json) do |curl|
+      curl.headers['Accept'] = 'application/json'
+      curl.headers['Content-Type'] = 'application/json'
     end
+  end
 end
