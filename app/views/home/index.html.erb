@@ -27,23 +27,24 @@
   <p>
     Showing
     <%= select_tag(:page_size, options_for_select([10,25,50,100], @companies.query[:pagination][:page_size]), class: 'form-control filter-inline') %>
-    of <%=@companies.total%>
+    of <span class="pagination-total"><%=@companies.total%></span>
   </p>
   <nav class="pull-right">
     <ul class="pagination pagination-sm">
       <li class="disabled">
-        <a href="#" aria-label="Previous">
+        <a aria-label="Previous">
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
-      <li class="active"><a href="#">1</a></li>
-      <li><a href="#">2</a></li>
-      <li><a href="#">3</a></li>
-      <li class="disabled"><a href="#">&hellip;</a></li>
-      <li><a href="#">4</a></li>
-      <li><a href="#">5</a></li>
+      <li class="active"><a>1</a></li>
+      <li><a>2</a></li>
+      <li><a>3</a></li>
+      <li class="disabled"><a>&hellip;</a></li>
+      <% @companies.last_two_pages.each do |number| %>
+        <li><a><%= number %></a></li>
+      <% end %>
       <li>
-        <a href="#" aria-label="Next">
+        <a aria-label="Next">
           <span aria-hidden="true">&raquo;</span>
         </a>
       </li>

@@ -81,8 +81,14 @@ class CompanyRelation < Company
   end
 
   def pagination
-    c = self.results['pagination']
+    self.results['pagination']
   end
+
+  def last_two_pages
+    last = (self.total.to_f / self.pagination['page_size'].to_i).ceil
+    (last-1)..last
+  end
+
 
   def api_call
     Curl::Easy.http_post(BASE_URL+'list', @query.to_json) do |curl|

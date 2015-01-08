@@ -20,6 +20,12 @@ $(function() {
     update_companies();
   });
 
+  $('.pagination li').not('.disabled').click(function() {
+    $('.pagination li').removeClass('active');
+    $(this).addClass('active');
+
+    update_companies();
+  });
 });
 
 // update the companies
@@ -27,8 +33,9 @@ function update_companies() {
   var field_tag = $('.field-header.active'),
       field = field_tag.attr('field'),
       dir = field_tag.hasClass('asc') ? 'asc' : 'desc',
-      page_size = $('#page_size').val(),
-      data = {by: field, dir: dir, page_size: page_size};
+      page_size = parseInt($('#page_size').val()),
+      page_start = (parseInt($('.pagination li.active').text()) - 1) * page_size;
+      data = {by: field, dir: dir, page_size: page_size, page_start: page_start};
 
   $('#company-mask').show();
   $.ajax({
