@@ -21,16 +21,19 @@ $(function() {
 
 // update the companies
 function update_companies() {
-  var field = $('.field-header.active'),
-      dir = field.hasClass('asc') ? 'asc' : 'desc',
+  var field_tag = $('.field-header.active'),
+      field = field_tag.attr('field'),
+      dir = field_tag.hasClass('asc') ? 'asc' : 'desc',
       page_size = $('#page_size').val(),
-      data = {by: field.attr('field'), dir: dir, page_size: page_size};
+      data = {by: field, dir: dir, page_size: page_size};
 
+  $('#company-mask').show();
   $.ajax({
     dataType: "html",
     url: '/show',
     data: data
   }).done(function(html) {
+    $('#company-mask').hide();
     $('#companies').html(html);
   });
 }
