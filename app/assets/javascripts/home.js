@@ -2,36 +2,35 @@
 // All this logic will automatically be available in application.js.
 $(function() {
   $('.field-header').click(function() {
-    var field = $(this).attr('field');
+
     $('.field-header').removeClass('active');
     if($(this).hasClass('asc')) {
       $(this).removeClass('asc').addClass('desc').addClass('active');
-      $.ajax({
-        dataType: "html",
-        url: '/show',
-        data: {by: field, dir: 'desc'}
-      }).done(function(html) {
-        $('#companies').html(html);
-      });
     } else {
       $(this).removeClass('desc').addClass('asc').addClass('active');
-      $.ajax({
-        dataType: "html",
-        url: '/show',
-        data: {by: field, dir: 'asc'}
-      }).done(function(html) {
-        $('#companies').html(html);
-      });
     }
+
+    update_companies();
   });
 
   $('#page_size').change(function() {
-    $.ajax({
-      dataType: "html",
-      url: '/show',
-      data: {page_size: $(this).val()}
-    }).done(function(html) {
-      $('#companies').html(html);
-    });
+    update_companies();
   });
+
 });
+
+// update the companies
+function update_companies() {
+  var field = $('.field-header.active'),
+      dir = field.hasClass('asc') ? 'asc' : 'desc',
+      page_size = $('#page_size').val(),
+      data = {by: field.attr('field'), dir: dir, page_size: page_size};
+
+  $.ajax({
+    dataType: "html",
+    url: '/show',
+    data: data
+  }).done(function(html) {
+    $('#companies').html(html);
+  });
+}

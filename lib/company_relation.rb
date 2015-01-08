@@ -53,7 +53,8 @@ class CompanyRelation < Company
   end
 
   def order(options = {})
-    options[FIELD_MAPPINGS[options.keys.first]] = options.delete options.keys.first
+    key = options.keys.first
+    options[FIELD_MAPPINGS[key]] = options.delete key
     @query[:pagination].merge!(sort: '%s %s' % options.to_a.first)
     self
   end
