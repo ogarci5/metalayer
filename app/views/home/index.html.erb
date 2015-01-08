@@ -22,7 +22,6 @@
     <span class="text-muted">Something else</span>
   </div>
 </div>
-
 <h2 class="sub-header">Companies</h2>
 <p>Showing
   <%= select_tag(:page_size, options_for_select([10,25,50,100], @companies.query[:pagination][:page_size]), class: 'form-control filter') %>
