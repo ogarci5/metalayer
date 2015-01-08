@@ -1,10 +1,67 @@
-<% @companies.each do |company| %>
-  <tr>
-    <td><%=company['company_name']%></td>
-    <td><%=company['city']%></td>
-    <td><%=company['state']%></td>
-    <td><%=company['industry']%></td>
-    <td><%=company['annual_revenue']%></td>
-    <td><%=company['employees']%></td>
-  </tr>
-<% end %>
+
+
+<div class="pagination-container">
+  <p>
+    Showing
+    <%= select_tag(:page_size, options_for_select([10,25,50,100], @companies.pagination[:page_size]), class: 'form-control filter-inline') %>
+    of <span class="pagination-total"><%=@companies.total%></span>
+  </p>
+  <nav class="pull-right">
+    <ul class="pagination pagination-sm">
+      <li class="pagination-back <%= @companies.page_number > 1 ? '' : 'disabled' %>">
+        <a aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <% @companies.pages.each do |page| %>
+        <% if page[:number] ==  @companies.page_number %>
+          <li class="active"><a><%= page[:number] %></a></li>
+        <% else %>
+          <li class="<%= page[:status] %>"><a><%= page[:number] %></a></li>
+        <% end %>
+      <% end %>
+      <li class="pagination-next <%= @companies.page_number < @companies.total_pages ? '' : 'disabled' %>">
+        <a aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+</div>
+
+<div class="table-responsive">
+  <div id="company-mask">
+    <div class="mask"></div>
+    <div class="loading-container">
+      <div class="loading">
+        <%= image_tag(image_path('loading_tails.gif')) %>
+        <p>Please wait...</p>
+      </div>
+    </div>
+  </div>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th class="field-header active asc" field="company_name">Company Name <span class="glyphicon glyphicon-chevron-down"></span></th>
+      <th class="field-header" field="city">City <span class="glyphicon"></span></th>
+      <th class="field-header" field="state">State <span class="glyphicon"></span></th>
+      <th class="field-header" field="industry">Industry <span class="glyphicon"></span></th>
+      <th class="field-header" field="annual_revenue">Revenue <span class="glyphicon"></span></th>
+      <th class="field-header" field="employees">Employees <span class="glyphicon"></span></th>
+    </tr>
+    </thead>
+    <tbody id="companies">
+      <% @companies.each do |company| %>
+        <tr>
+          <td><%= company['company_name_s'] %></td>
+          <td><%= company['city_s'] %></td>
+          <td><%= company['state_s'] %></td>
+          <td><%= company['industry_s'] %></td>
+          <td><%= company['annual_revenue_l'] %></td>
+          <td><%= company['employees_l'] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

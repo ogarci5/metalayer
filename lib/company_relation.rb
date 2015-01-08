@@ -84,9 +84,30 @@ class CompanyRelation < Company
     self.results['pagination']
   end
 
-  def last_two_pages
-    last = (self.total.to_f / self.pagination['page_size'].to_i).ceil
-    (last-1)..last
+  def total_pages
+    (self.total.to_f / self.pagination['page_size'].to_i).ceil
+  end
+
+  def page_number
+    ((self.pagination['page_start'].to_i / self.pagination['page_size'].to_f) + 1).to_i
+  end
+
+  def pages
+    if self.total_pages < 5
+      (1..5).map do |x|
+        if x < total_pages
+          {number: x, status: 'disabled'}
+        else
+          {number: x, status: nil}
+        end
+      end
+    elsif self.page_number < 4
+      (1..5).map {|x| {number: x, status: nil}}
+    elsif self.page_number + 1 < self.total_pages
+      ((self.page_number-2)..(self.page_number+2)).map {|x| {number: x, status: nil}}
+    else
+      ((self.total_pages - 4)..self.total_pages).map {|x| {number: x, status: nil}}
+    end
   end
 
 

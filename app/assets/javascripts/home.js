@@ -20,12 +20,22 @@ $(function() {
     update_companies();
   });
 
-  $('.pagination li').not('.disabled').click(function() {
+  $('.pagination li').not('.disabled').not('.active').click(function() {
+    var current_page = parseInt($('.pagination li.active').text()),
+        li = $(this);
+
+    if($(this).hasClass('pagination-next')) {
+      li = $('.pagination li').filter(function() {return $(this).text() == (current_page + 1)});
+    } else if ($(this).hasClass('pagination-back')) {
+      li = $('.pagination li').filter(function() {return $(this).text() == (current_page - 1)});
+    }
+
     $('.pagination li').removeClass('active');
-    $(this).addClass('active');
+    li.addClass('active');
 
     update_companies();
   });
+
 });
 
 // update the companies
@@ -34,7 +44,7 @@ function update_companies() {
       field = field_tag.attr('field'),
       dir = field_tag.hasClass('asc') ? 'asc' : 'desc',
       page_size = parseInt($('#page_size').val()),
-      page_start = (parseInt($('.pagination li.active').text()) - 1) * page_size;
+      page_start = (parseInt($('.pagination li.active').text()) - 1) * page_size,
       data = {by: field, dir: dir, page_size: page_size, page_start: page_start};
 
   $('#company-mask').show();
@@ -44,6 +54,47 @@ function update_companies() {
     data: data
   }).done(function(html) {
     $('#company-mask').hide();
-    $('#companies').html(html);
+    $('#table-container').html(html);
   });
 }
+
+function update_pagination() {
+
+}
+
+$( document ).ajaxComplete(function() {
+  $('.field-header').click(function() {
+
+    $('.field-header').removeClass('active');
+    $('.field-header').not(this).removeClass('asc desc');
+    if($(this).hasClass('asc')) {
+      $(this).removeClass('asc').addClass('desc').addClass('active');
+      $(this).find('span').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+    } else {
+      $(this).removeClass('desc').addClass('asc').addClass('active');
+      $(this).find('span').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+    }
+
+    update_companies();
+  });
+
+  $('#page_size').change(function() {
+    update_companies();
+  });
+
+  $('.pagination li').not('.disabled').not('.active').click(function() {
+    var current_page = parseInt($('.pagination li.active').text()),
+        li = $(this);
+
+    if($(this).hasClass('pagination-next')) {
+      li = $('.pagination li').filter(function() {return $(this).text() == (current_page + 1)});
+    } else if ($(this).hasClass('pagination-back')) {
+      li = $('.pagination li').filter(function() {return $(this).text() == (current_page - 1)});
+    }
+
+    $('.pagination li').removeClass('active');
+    li.addClass('active');
+
+    update_companies();
+  });
+});

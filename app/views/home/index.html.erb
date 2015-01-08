@@ -23,59 +23,6 @@
   </div>
 </div>
 <h2 class="sub-header">Companies</h2>
-<div class="pagination-container">
-  <p>
-    Showing
-    <%= select_tag(:page_size, options_for_select([10,25,50,100], @companies.query[:pagination][:page_size]), class: 'form-control filter-inline') %>
-    of <span class="pagination-total"><%=@companies.total%></span>
-  </p>
-  <nav class="pull-right">
-    <ul class="pagination pagination-sm">
-      <li class="disabled">
-        <a aria-label="Previous">
-          <span aria-hidden="true">&laquo;</span>
-        </a>
-      </li>
-      <li class="active"><a>1</a></li>
-      <li><a>2</a></li>
-      <li><a>3</a></li>
-      <li class="disabled"><a>&hellip;</a></li>
-      <% @companies.last_two_pages.each do |number| %>
-        <li><a><%= number %></a></li>
-      <% end %>
-      <li>
-        <a aria-label="Next">
-          <span aria-hidden="true">&raquo;</span>
-        </a>
-      </li>
-    </ul>
-  </nav>
-
-</div>
-
-<div class="table-responsive">
-  <div id="company-mask">
-    <div class="mask"></div>
-    <div class="loading-container">
-      <div class="loading">
-        <%= image_tag(image_path('loading_tails.gif')) %>
-        <p>Please wait...</p>
-      </div>
-    </div>
-  </div>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th class="field-header active asc" field="company_name">Company Name <span class="glyphicon glyphicon-chevron-down"></span></th>
-        <th class="field-header" field="city">City <span class="glyphicon"></span></th>
-        <th class="field-header" field="state">State <span class="glyphicon"></span></th>
-        <th class="field-header" field="industry">Industry <span class="glyphicon"></span></th>
-        <th class="field-header" field="annual_revenue">Revenue <span class="glyphicon"></span></th>
-        <th class="field-header" field="employees">Employees <span class="glyphicon"></span></th>
-      </tr>
-    </thead>
-    <tbody id="companies">
-      <%= render partial: 'table' %>
-    </tbody>
-  </table>
+<div id="table-container">
+  <%= render partial: 'table' %>
 </div>
