@@ -24,7 +24,7 @@
 </div>
 <h2 class="sub-header">Companies</h2>
 <p>Showing
-  <%= select_tag(:page_size, options_for_select([10,25,50,100], @companies.query[:pagination][:page_size]), class: 'form-control filter') %>
+  <%= select_tag(:page_size, options_for_select([10,25,50,100], @companies.query[:pagination][:page_size]), class: 'form-control filter-inline') %>
   of <%=@companies.total%>
 </p>
 <div class="table-responsive">
@@ -32,7 +32,7 @@
     <div class="mask"></div>
     <div class="loading-container">
       <div class="loading">
-        <%= image_tag(image_path('loading.gif')) %>
+        <%= image_tag(image_path('loading_tails.gif')) %>
         <p>Please wait...</p>
       </div>
     </div>

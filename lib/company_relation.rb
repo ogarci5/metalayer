@@ -44,8 +44,11 @@ class CompanyRelation < Company
   attr_reader :query
 
   def initialize(query = {})
-    @results = self.api_call
     @query = query.reverse_merge(pagination: PAGINATION_DEFAULT, filters: FILTERS_DEFAULT)
+  end
+
+  def results
+    @results = self.api_call
   end
 
   def paginate(options = {})
