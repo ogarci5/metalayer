@@ -80,6 +80,16 @@
   }
 }
 
+th.field-header {
+  cursor: pointer;
+  &.active span {
+    display: inline;
+  }
+  span {
+    display: none;
+  }
+}
+
 .filter {
   width: auto;
 }

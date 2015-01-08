@@ -4,10 +4,13 @@ $(function() {
   $('.field-header').click(function() {
 
     $('.field-header').removeClass('active');
+    $('.field-header').not(this).removeClass('asc desc');
     if($(this).hasClass('asc')) {
       $(this).removeClass('asc').addClass('desc').addClass('active');
+      $(this).find('span').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
     } else {
       $(this).removeClass('desc').addClass('asc').addClass('active');
+      $(this).find('span').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
     }
 
     update_companies();

@@ -48,7 +48,7 @@ class CompanyRelation < Company
   end
 
   def results
-    @results = self.api_call
+    @results ||= self.api_call
   end
 
   def paginate(options = {})
