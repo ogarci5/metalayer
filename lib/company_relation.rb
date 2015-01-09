@@ -115,6 +115,7 @@ class CompanyRelation < Company
     Curl::Easy.http_post(BASE_URL+'list', @query.to_json) do |curl|
       curl.headers['Accept'] = 'application/json'
       curl.headers['Content-Type'] = 'application/json'
+      curl.headers['APIKey'] = 'ybehlhmt779rpgw4321fx'
     end
   end
 end
